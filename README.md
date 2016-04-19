@@ -1,10 +1,12 @@
 # Rate Limit Service
 
-This codebase contains a service for keeping track of per user limits for outgoing requests based on the 
-given set of rules. The service requires Redis to be up and running on the same host with itself.
+This codebase contains a service for keeping track of limits imposed by 3-rd party resources. It might be useful for 
+API clients, web crawling, or other tasks that need to be throttled.
+It provides an RESTful API for reporting requests, setting/removing limits, verifying whether limits have been reached on
+a per user bases. The service uses [Redis](redis.io) and [H2 database](http://www.h2database.com/html/main.html) for 
+storing requests and limits.
 
 ## To Start the Service
-
 
 ```
 $ cd rate-limiting-proxy
@@ -95,4 +97,5 @@ Number of maximum requests reached in [Hourly limit]
 
 # Internals
 
-The service relies on Redis to keep its state and can be scaled out horizontally.
+The service relies on Redis to keep its state (mainly tokens) and can be scaled out horizontally. 
+Under the hood it implements [Token bucket](https://en.wikipedia.org/wiki/Token_bucket) algorithm where it keeps tokens.
